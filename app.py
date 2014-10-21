@@ -1,15 +1,15 @@
 import praw 
-from flask import Flask, session, request, redirect, url_for, render_template 
+from flask import Flask, session, request, redirect, url_for, render_template, jsonify 
 
 r = praw.Reddit(user_agent='karma_farm')
 app = Flask(__name__)
 app.debug = True 
-
+current_api_version = '/api/v0'
 @app.route('/')
 def index():
     return 'Hello world!'
 
-@app.route('/<username>')
+@app.route(current_api_version + '/<username>', methods=['GET'])
 def user_info(username):
     user = r.get_redditor(username)
     gen = user.get_comments()
@@ -20,23 +20,32 @@ def user_info(username):
     
     return ''.join(comments)
 
-@app.route('/karmahist/<username>')
+@app.route(current_api_version + '/user_profile/<username>', methods=['GET'])
 def karam_histogram(username):
     user = r.get_redditor(username)
-    gen = user.get_submitted(limit=100)
-    karma_by_subreddit = {}
-    result = ""
+    user_json = {
+        '_id' : str(username),
+        'comment_karma' : user.comment_karma,
+        'link_karma' : user.link_karma
+    }    
 
-    for thing in gen:
+    return jsonify(user_json)
+
+@app.route('/r/<subreddit>', methods=['GET'])
+def first_twentyfive(subreddit):
+    submissions = r.get_subreddit(subreddit).get_hot(limit=25)
+    result = [str(x) for x in submissions]
+
+    results = ""
+
+    for post in result:
+        results += "{}<br/>".format(post)
+
+    return results
+
+
+
         
-        subreddit = thing.subreddit.display_name
-        karma_by_subreddit[subreddit] = (karma_by_subreddit.get(subreddit, 0) + thing.score)
-
-    for subreddit, karma in karma_by_subreddit.iteritems():
-        result += "{}: {}<br/>".format(subreddit, karma_by_subreddit[subreddit])
-
-    return result
-
 
 if __name__ == '__main__':
-    app.run('0.0.0.0', port=5000)
+     app.run('0.0.0.0', port=5000)
