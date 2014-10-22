@@ -1,25 +1,15 @@
 import praw 
-from flask import Flask, session, request, redirect, url_for, render_template, jsonify 
+from flask import Flask, session, request, redirect, url_for, render_template, jsonify, Response
+import json
 
 r = praw.Reddit(user_agent='karma_farm')
 app = Flask(__name__)
 app.debug = True 
 current_api_version = '/api/v0'
-@app.route('/')
-def index():
-    return 'Hello world!'
 
-@app.route(current_api_version + '/<username>', methods=['GET'])
-def user_info(username):
-    user = r.get_redditor(username)
-    gen = user.get_comments()
-    comments = [] 
-
-    for comment in gen: 
-        comments.append(str(comment.author) + '\n' + str(comment.body) + '\n' + str(comment.score) + '\n' + '\n')
-    
-    return ''.join(comments)
-
+"""
+Returns information about a user
+"""
 @app.route(current_api_version + '/user_profile/<username>', methods=['GET'])
 def karam_histogram(username):
     user = r.get_redditor(username)
@@ -29,22 +19,27 @@ def karam_histogram(username):
         'link_karma' : user.link_karma
     }    
 
-    return jsonify(user_json)
+    return Response(json.dumps(user_json), mimetype='application/json')
 
-@app.route('/r/<subreddit>', methods=['GET'])
-def first_twentyfive(subreddit):
-    submissions = r.get_subreddit(subreddit).get_hot(limit=25)
-    result = [str(x) for x in submissions]
+"""
+Returns a JSON list of top page submissions ranked from greatest to least for a certain subreddit
+Limited to only 200 submissions as of current  
+"""
+@app.route(current_api_version + '/top_page_submissions/<subreddit>', methods=['GET'])
+def top_page_submissions(subreddit):
+    submission_list = r.get_subreddit(subreddit).get_top(limit=200)
+    result = []
+    
+    for submission in submission_list:
+        item = {
+            '_id' : submission.title,
+            'karma' : submission.score   
+        }
 
-    results = ""
+        result.append(item)
 
-    for post in result:
-        results += "{}<br/>".format(post)
-
-    return results
-
-
-
+    return Response(json.dumps(result), mimetype='application/json')
+    
         
 
 if __name__ == '__main__':
