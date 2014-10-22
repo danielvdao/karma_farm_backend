@@ -1,5 +1,6 @@
 import praw 
-from flask import Flask, session, request, redirect, url_for, render_template, jsonify, Response
+from flask import Flask, session, request, jsonify, Response
+from utils import *
 import json
 
 r = praw.Reddit(user_agent='karma_farm')
@@ -32,8 +33,10 @@ def top_page_submissions(subreddit):
     
     for submission in submission_list:
         item = {
-            '_id' : submission.title,
-            'karma' : submission.score   
+            '_id' : get_link_id(submission.permalink),
+            'title' : submission.title,
+            'karma' : submission.score,
+            'link' : 'http://redd.it/' + get_link_id(submission.permalink)   
         }
 
         result.append(item)
