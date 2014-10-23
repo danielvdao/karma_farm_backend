@@ -1,11 +1,11 @@
-import praw 
+import praw
 from flask import Flask, session, request, jsonify, Response
 from utils import *
 import json
 
 r = praw.Reddit(user_agent='karma_farm')
 app = Flask(__name__)
-app.debug = True 
+app.debug = True
 current_api_version = '/api/v0'
 
 """
@@ -18,32 +18,32 @@ def karam_histogram(username):
         '_id' : str(username),
         'comment_karma' : user.comment_karma,
         'link_karma' : user.link_karma
-    }    
+    }
 
     return Response(json.dumps(user_json), mimetype='application/json')
 
 """
 Returns a JSON list of top page submissions ranked from greatest to least for a certain subreddit
-Limited to only 200 submissions as of current  
+Limited to only 200 submissions as of current
 """
 @app.route(current_api_version + '/top_page_submissions/<subreddit>', methods=['GET'])
 def top_page_submissions(subreddit):
     submission_list = r.get_subreddit(subreddit).get_top(limit=200)
     result = []
-    
+
     for submission in submission_list:
         item = {
             '_id' : get_link_id(submission.permalink),
             'title' : submission.title,
             'karma' : submission.score,
-            'link' : 'http://redd.it/' + get_link_id(submission.permalink)   
+            'link' : 'http://redd.it/' + get_link_id(submission.permalink)
         }
 
         result.append(item)
 
     return Response(json.dumps(result), mimetype='application/json')
-    
-        
+
+
 
 if __name__ == '__main__':
      app.run('0.0.0.0', port=5000)
