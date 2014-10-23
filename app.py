@@ -1,7 +1,11 @@
+from algo import KarmaRanker
+
 import praw
 from flask import Flask, session, request, jsonify, Response
 from utils import *
 import json
+
+
 
 r = praw.Reddit(user_agent='karma_farm')
 app = Flask(__name__)
@@ -43,6 +47,12 @@ def top_page_submissions(subreddit):
 
     return Response(json.dumps(result), mimetype='application/json')
 
+@app.route(current_api_version + 'algotest/<submission_id>')
+def algo_test(submission_id):
+    submission = r.get_submission(submission_id=submission_id)
+
+    ranked_submission = KarmaRanker(submission.comments)
+    return Response(ranked_submission.result, mimetype='application/json')
 
 
 if __name__ == '__main__':
