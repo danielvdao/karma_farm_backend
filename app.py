@@ -17,7 +17,7 @@ current_api_version = '/api/v0'
 Returns information about a user
 """
 @app.route(current_api_version + '/user_profile/<username>', methods=['GET'])
-def karam_histogram(username):
+def karma_histogram(username):
     user = r.get_redditor(username)
     user_json = {
         '_id' : str(username),
@@ -61,4 +61,4 @@ def algo_test(submission_id):
 
 
 if __name__ == '__main__':
-     app.run('0.0.0.0', port=5000)
+     app.run('0.0.0.0', port=5000, threaded=True)
