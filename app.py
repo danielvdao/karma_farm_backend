@@ -1,10 +1,11 @@
-from algo import KarmaRanker
-
+#!/root/karma_farm_backend/venv/bin/python
 import praw
 from flask import Flask, session, request, jsonify, Response
-from utils import *
+
 import json
 
+from algo import KarmaRanker
+from utils import get_link_id
 
 
 r = praw.Reddit(user_agent='karma_farm')
@@ -36,21 +37,25 @@ def top_page_submissions(subreddit):
     result = []
 
     for submission in submission_list:
+        _id = get_link_id(submission.short_link)
+
         item = {
-            '_id' : get_link_id(submission.permalink),
+            'permalink': submission.permalink,
+            '_id' : _id,
             'title' : submission.title,
             'karma' : submission.score,
-            'link' : 'http://redd.it/' + get_link_id(submission.permalink)
         }
 
         result.append(item)
 
     return Response(json.dumps(result), mimetype='application/json')
 
-@app.route(current_api_version + 'algotest/<submission_id>')
+"""
+Returns JSON payload for ranking algorithm testing
+"""
+@app.route(current_api_version + '/algotest/<submission_id>')
 def algo_test(submission_id):
     submission = r.get_submission(submission_id=submission_id)
-
     ranked_submission = KarmaRanker(submission.comments)
     return Response(ranked_submission.result, mimetype='application/json')
 
