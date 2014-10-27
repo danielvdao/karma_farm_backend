@@ -87,7 +87,7 @@ class KarmaRanker:
         """
         formula for karma potential ranking
         """
-        return 500  + ((score/self.total_karma) * KarmaRanker.KARMA_FACTOR)        \
+        return 500  + ((score / self.total_karma) * KarmaRanker.KARMA_FACTOR)        \
                     - (num_replies * KarmaRanker.REPLY_FACTOR)  \
                     - (depth * KarmaRanker.DEPTH_FACTOR)        \
 
