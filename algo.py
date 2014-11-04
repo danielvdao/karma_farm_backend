@@ -55,6 +55,7 @@ class KarmaRanker:
                     comment_data = {
                         'text': comment.body,
                         'score': comment.score,
+			'author': str(comment.author),
                         'link': comment.permalink,
                         # need a subtree size method if we want
                         # to look at sub levels
