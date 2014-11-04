@@ -53,7 +53,7 @@ def top_page_submissions(subreddit):
 """
 Returns JSON payload for ranking algorithm testing
 """
-@app.route(current_api_version + '/ranking/<submission_id>', methods=['GET'])
+@app.route(current_api_version + '/comments/<submission_id>', methods=['GET'])
 def algo_test(submission_id):
     submission = r.get_submission(submission_id=submission_id)
     ranked_submission = KarmaRanker(submission.comments)
