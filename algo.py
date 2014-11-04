@@ -53,7 +53,7 @@ class KarmaRanker:
                                                depth)                  \
 
                     comment_data = {
-                        'body': comment.body,
+                        'text': comment.body,
                         'score': comment.score,
                         'link': comment.permalink,
                         # need a subtree size method if we want
