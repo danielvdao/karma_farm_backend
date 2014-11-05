@@ -4,13 +4,12 @@ from flask import Flask, session, request, jsonify, Response
 
 import json
 
-from algo import KarmaRanker
-from utils import get_link_id
+from util_functions import KarmaRanker 
+from util_functions import get_link_id
 
+from flask_app import app
 
 r = praw.Reddit(user_agent='karma_farm')
-app = Flask(__name__)
-app.debug = True
 current_api_version = '/api/v0'
 
 """
@@ -60,5 +59,4 @@ def algo_test(submission_id):
     return Response(ranked_submission.result, mimetype='application/json')
 
 
-if __name__ == '__main__':
-     app.run('0.0.0.0', port=5000, threaded=True)
+
