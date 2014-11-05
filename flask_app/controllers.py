@@ -1,13 +1,14 @@
 #!/root/karma_farm_backend/venv/bin/python
-import praw
-from flask import Flask, session, request, jsonify, Response
+from flask import Flask, session, request, Response
 
-import json
+import praw 
+import json 
 
-from util_functions import KarmaRanker 
+from util_functions import KarmaRanker
 from util_functions import get_link_id
 
 from flask_app import app
+
 
 r = praw.Reddit(user_agent='karma_farm')
 current_api_version = '/api/v0'
