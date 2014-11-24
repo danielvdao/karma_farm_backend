@@ -1,8 +1,8 @@
 #!/root/karma_farm_backend/venv/bin/python
 from flask import Flask, session, request, Response
 
-import praw 
-import json 
+import praw
+import json
 
 from util_functions import KarmaRanker
 from util_functions import get_link_id
@@ -10,7 +10,6 @@ from util_functions import get_link_id
 from flask_app import app
 
 
-r = praw.Reddit(user_agent='karma_farm')
 current_api_version = '/api/v0'
 
 """
@@ -60,4 +59,10 @@ def algo_test(submission_id):
     return Response(ranked_submission.result, mimetype='application/json')
 
 
+if __name__ == '__main__':
+    r = praw.Reddit(user_agent='karma_farm')
 
+    r.set_oauth_app_info(client_id='stJlUSUbPQe5lQ',
+                         client_secret='DoNotSHAREWithANYBODY',     
+...                      redirect_uri='http://127.0.0.1:65010/'
+...                                   'authorize_callback')
