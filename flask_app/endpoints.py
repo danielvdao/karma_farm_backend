@@ -74,6 +74,7 @@ def login():
 
     try:
         r.login(username, password)
+        result['success'] = 'True'
  
     except:
         pass
