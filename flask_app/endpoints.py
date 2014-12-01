@@ -10,7 +10,7 @@ from util_functions import get_link_id
 from flask_app import app
 
 
-r = praw.Reddit(user_agent='karma_farm')
+r = praw.Reddit(user_agent='karma_farm app by /udanielvd v1.0')
 current_api_version = '/api/v0'
 
 """
@@ -66,13 +66,19 @@ Logs in on reddit and returns a success on whether or not the login succeeded
 @app.route(current_api_version + '/login', methods=['POST'])
 def login():
     user_info = request.get_json(force=True)
-    username = user_info['username']
-    password = user_info['password']
+    username = user_info['username'].replace('\n', '')
+    password = user_info['password'].replace('\n', '')
+    result = {
+        'success': 'False'
+    }
 
     try:
-
-
-
+        r.login(username, password)
+ 
+    except:
+        pass
+    
+    return Response(json.dumps(result), mimetype='application/json')
 
 
 """
