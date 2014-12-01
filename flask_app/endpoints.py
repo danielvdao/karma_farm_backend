@@ -1,5 +1,5 @@
 #!/root/karma_farm_backend/venv/bin/python
-from flask import Flask, session, request, Response
+from flask import Flask, request, Response
 
 import praw 
 import json 
@@ -59,5 +59,18 @@ def algo_test(submission_id):
     ranked_submission = KarmaRanker(submission.comments)
     return Response(ranked_submission.result, mimetype='application/json')
 
-
+"""
+Logs in and comments
+"""
+@app.route(current_api_version + '/login/comment', methods=['POST'])
+def post():
+    content = request.get_json(force=True)
+   
+    result = False
+    if content is not None:
+        result = True
+    data = {
+            'success' : result     
+    }
+    return Response(json.dumps(data), mimetype='application/json')
 
