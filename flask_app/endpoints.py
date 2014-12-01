@@ -59,13 +59,32 @@ def algo_test(submission_id):
     ranked_submission = KarmaRanker(submission.comments)
     return Response(ranked_submission.result, mimetype='application/json')
 
+
 """
-Logs in and comments
+Logs in on reddit and returns a success on whether or not the login succeeded
 """
-@app.route(current_api_version + '/login/comment', methods=['POST'])
-def post():
+@app.route(current_api_version + '/login', methods=['POST'])
+def login():
+    user_info = request.get_json(force=True)
+    username = user_info['username']
+    password = user_info['password']
+
+    try:
+
+
+
+
+
+"""
+Comments on reddit and return a success on whether or not the comment succeeded
+"""
+@app.route(current_api_version + '/comment', methods=['POST'])
+def comment():
     content = request.get_json(force=True)
-   
+    
+    submission_id = content['submission_id']
+    username = content['username']
+    password = content['password']
     result = False
     if content is not None:
         result = True
