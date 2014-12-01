@@ -89,14 +89,28 @@ Comments on reddit and return a success on whether or not the comment succeeded
 def comment():
     content = request.get_json(force=True)
     
-    submission_id = content['submission_id']
-    username = content['username']
-    password = content['password']
-    result = False
-    if content is not None:
-        result = True
-    data = {
-            'success' : result     
+    comment_id = content['comment_id']
+    username = content['username'].replace('\n', '')
+    password = content['password'].replace('\n', ''_
+    text = content['text']
+
+    result = {
+        'success': 'False'    
     }
+
+    # logging in so that one could comment 
+    try:
+        r.login(username, password)
+    except:
+        return Response(json.dumps(result), mimetype='application/json')
+
+    comment = r.get_info(thing_id='t1_' + comment_id)
+    
+    # if comment fails 
+    if comment.reply(text) is None:
+        return Response(json.dumps(result), mimetype='application/json')
+
+    result['success'] = 'True'
+    
     return Response(json.dumps(data), mimetype='application/json')
 

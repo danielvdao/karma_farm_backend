@@ -60,6 +60,7 @@ class KarmaRanker:
                         # need a subtree size method if we want
                         # to look at sub levels
                         'rank': rank,
+                        '_id': comment.id
                     }
 
                     if comment.replies:
