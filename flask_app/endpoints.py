@@ -91,26 +91,21 @@ def comment():
     
     comment_id = content['comment_id']
     username = content['username'].replace('\n', '')
-    password = content['password'].replace('\n', ''_
+    password = content['password'].replace('\n', '')
     text = content['text']
 
     result = {
         'success': 'False'    
     }
 
-    # logging in so that one could comment 
+    # logging in and commenting 
     try:
         r.login(username, password)
+        comment = r.get_info(thing_id='t1_' + comment_id)
+        comment.reply(text)
+        result['success'] = 'True'
     except:
-        return Response(json.dumps(result), mimetype='application/json')
+        pass
 
-    comment = r.get_info(thing_id='t1_' + comment_id)
-    
-    # if comment fails 
-    if comment.reply(text) is None:
-        return Response(json.dumps(result), mimetype='application/json')
-
-    result['success'] = 'True'
-    
-    return Response(json.dumps(data), mimetype='application/json')
+    return Response(json.dumps(result), mimetype='application/json')
 
