@@ -9,6 +9,7 @@ class KarmaRanker:
     """
 
     DEPTH_FACTOR = 45  # scales depth value
+
     KARMA_FACTOR = 50  # scales current karma of comment
     REPLY_FACTOR = 30  # scales number of immediate replies
 
@@ -72,9 +73,8 @@ class KarmaRanker:
 
 
                 elif issubclass(praw.objects.MoreComments, comment.__class__):
-                    comment_data = {
-                        'body': 'MoreComments'
-                    }
+                    # not supporting MoreCommentsObjects in beta
+                    pass
                 else:
                     raise TypeError("unexpected comment object for ranking")
 
