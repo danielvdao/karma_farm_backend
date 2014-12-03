@@ -1,14 +1,13 @@
 #!/root/karma_farm_backend/venv/bin/python
 from flask import Flask, request, Response
 
-import praw 
-import json 
+import praw
+import json
 
 from util_functions import KarmaRanker
 from util_functions import get_link_id
 
 from flask_app import app
-
 
 current_api_version = '/api/v0'
 
@@ -82,10 +81,10 @@ def login():
     try:
         r.login(username, password)
         result['success'] = 'True'
- 
+
     except:
         pass
-    
+
     return Response(json.dumps(result), mimetype='application/json')
 
 
@@ -97,17 +96,17 @@ def comment():
     r = praw.Reddit(user_agent='karma_farm by /udanielvd v1.0')
 
     content = request.get_json(force=True)
-    
+
     comment_id = content['comment_id']
     username = content['username'].replace('\n', '')
     password = content['password'].replace('\n', '')
     text = content['text']
 
     result = {
-        'success': 'False'    
+        'success': 'False'
     }
 
-    # logging in and commenting 
+    # logging in and commenting
     try:
         r.login(username, password)
         comment = r.get_info(thing_id='t1_' + comment_id)
@@ -127,7 +126,7 @@ def up_vote():
     submission_id = content['submission_id']
     username = content['username'].replace('\n', '')
     password = content['password'].replace('\n', '')
-    
+
     result = {
         'success': 'False'
     }
@@ -156,7 +155,7 @@ def down_vote():
     submission_id = content['submission_id']
     username = content['username'].replace('\n', '')
     password = content['password'].replace('\n', '')
-    
+
     result = {
         'success': 'False'
     }
@@ -175,6 +174,3 @@ def down_vote():
         pass
 
     return Response(json.dumps(result), mimetype='application/json')
-
-
-

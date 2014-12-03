@@ -8,9 +8,9 @@ class KarmaRanker:
     The Ranking algorithm class for KarmaFarm
     """
 
-    DEPTH_FACTOR = 10  # scales depth value
-    KARMA_FACTOR = 1.5  # scales current karma of comment
-    REPLY_FACTOR = 15  # scales number of immediate replies
+    DEPTH_FACTOR = 45  # scales depth value
+    KARMA_FACTOR = 150  # scales current karma of comment
+    REPLY_FACTOR = 30  # scales number of immediate replies
 
     def __init__(self, forest):
         self.forest = forest
@@ -72,9 +72,8 @@ class KarmaRanker:
 
 
                 elif issubclass(praw.objects.MoreComments, comment.__class__):
-                    comment_data = {
-                        'body': 'MoreComments'
-                    }
+                    # not supporting MoreCommentsObjects in beta
+                    pass
                 else:
                     raise TypeError("unexpected comment object for ranking")
 
