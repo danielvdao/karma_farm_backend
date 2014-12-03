@@ -106,13 +106,17 @@ def comment():
         'success': 'False'
     }
 
+    print comment_id
+    print text 
+
     # logging in and commenting
     try:
         r.login(username, password)
         comment = r.get_info(thing_id='t1_' + comment_id)
         comment.reply(text)
         result['success'] = 'True'
-    except:
+    except Exception, ex:
+        print 'Couldnt do it: %s' % ex
         pass
 
     return Response(json.dumps(result), mimetype='application/json')
