@@ -126,8 +126,7 @@ def up_vote():
     r = praw.Reddit(user_agent='karma_farm by /udanielvd v1.0')
 
     content = request.get_json(force=True)
-    comment_id = content['comment_id']
-    submission_id = content['submission_id']
+    _id = content['id']
     username = content['username'].replace('\n', '')
     password = content['password'].replace('\n', '')
 
@@ -136,16 +135,20 @@ def up_vote():
     }
 
     try:
+        print content['submission']
         r.login(username, password)
         thing = None
-        if content['submission'] == 'False':
-            thing = r.get_info(thing_id='t1_' + comment_id)
+        if str(content['submission']) == 'False':
+            print 'test'
+            thing = r.get_info(thing_id='t1_' + _id)
         else:
-            thing = r.get_info(thing_id='t3_' + submission_id)
+            print 'test'
+            thing = r.get_info(thing_id='t3_' + _id)
 
         thing.upvote()
         result['success'] = 'True'
-    except:
+    except Exception, ex:
+        print 'wrong: %s' % ex
         pass
 
     return Response(json.dumps(result), mimetype='application/json')
@@ -155,8 +158,7 @@ def down_vote():
     r = praw.Reddit(user_agent='karma_farm by /udanielvd v1.0')
 
     content = request.get_json(force=True)
-    comment_id = content['comment_id']
-    submission_id = content['submission_id']
+    _id = content['id']
     username = content['username'].replace('\n', '')
     password = content['password'].replace('\n', '')
 
@@ -168,9 +170,9 @@ def down_vote():
         r.login(username, password)
         thing = None
         if content['submission'] == 'False':
-            thing = r.get_info(thing_id='t1_' + comment_id)
+            thing = r.get_info(thing_id='t1_' + _id)
         else:
-            thing = r.get_info(thing_id='t3_' + submission_id)
+            thing = r.get_info(thing_id='t3_' + _id)
 
         thing.downvote()
         result['success'] = 'True'
@@ -184,8 +186,7 @@ def clearvote():
     r = praw.Reddit(user_agent='karma_farm by /udanielvd v1.0')
 
     content = request.get_json(force=True)
-    comment_id = content['comment_id']
-    submission_id = content['submission_id']
+    _id = content['id']
     username = content['username'].replace('\n', '')
     password = content['password'].replace('\n', '')
 
@@ -197,9 +198,9 @@ def clearvote():
         r.login(username, password)
         thing = None
         if content['submission'] == 'False':
-            thing = r.get_info(thing_id='t1_' + comment_id)
+            thing = r.get_info(thing_id='t1_' + _id)
         else:
-            thing = r.get_info(thing_id='t3_' + submission_id)
+            thing = r.get_info(thing_id='t3_' + _id)
 
         thing.clear_vote()
         result['success'] = 'True'
