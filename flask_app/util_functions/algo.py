@@ -42,7 +42,7 @@ class KarmaRanker:
         if forest:
             comment_json = []
             self.total_comments += len(forest)
-
+            comment_data = {}
             for comment in forest:
 
 
