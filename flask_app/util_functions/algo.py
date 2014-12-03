@@ -9,7 +9,7 @@ class KarmaRanker:
     """
 
     DEPTH_FACTOR = 45  # scales depth value
-    KARMA_FACTOR = 15  # scales current karma of comment
+    KARMA_FACTOR = 50  # scales current karma of comment
     REPLY_FACTOR = 30  # scales number of immediate replies
 
     def __init__(self, forest):
